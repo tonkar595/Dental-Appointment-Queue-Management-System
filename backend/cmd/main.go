@@ -10,6 +10,7 @@ import (
 
 func main() {
 	db.DatabaseConnected()
+	// db.AutoMigrate(db.DB)
 	app := fiber.New()
 
 	container := wire.NewContainer(db.DB)
