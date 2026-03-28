@@ -32,3 +32,21 @@ func (r *UserRepository) FindByEmail(email string) (*models.User, error) {
 		First(&user).Error
 	return &user, err
 }
+
+func (r *UserRepository) RegisterPatient(user *models.User, patient *models.Patient) error {
+	// เริ่ม Transaction
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		// 1. บันทึก User ก่อน เพื่อให้ได้ ID มา
+		if err := tx.Create(user).Error; err != nil {
+			return err
+		}
+
+		// 2. เอา ID ที่ได้จาก User มาใส่ใน Patient (1:1 Relationship)
+		patient.ID = user.ID
+		if err := tx.Create(patient).Error; err != nil {
+			return err // ถ้าพังตรงนี้ GORM จะ Rollback การสร้าง User ให้เอง
+		}
+
+		return nil
+	})
+}

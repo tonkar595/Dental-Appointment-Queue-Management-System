@@ -9,15 +9,17 @@ type Appointment struct {
 	ServiceID         uint       `json:"service_id"`
 	AppointmentStart  time.Time  `json:"appointment_start"`
 	AppointmentEnd    time.Time  `json:"appointment_end"`
+	TreatmentNote     string     `gorm:"type:text" json:"treatment_note"`
 	StatusID          uint       `json:"status_id"`
 	IsWalkIn          bool       `gorm:"default:false" json:"is_walk_in"`
 	CreatedAt         time.Time  `json:"created_at"`
 	UpdatedAt         time.Time  `json:"updated_at"`
 	BookedAt          *time.Time `json:"booked_at"`
 
-	Patient           Patient           `json:"patient"`
-	ServiceType       ServiceType       `json:"service_type" gorm:"foreignKey:ServiceID"`
-	AppointmentStatus AppointmentStatus `json:"status" gorm:"foreignKey:StatusID"`
+	Patient         Patient           `gorm:"foreignKey:PatientID" json:"patient,omitempty"`
+	DentistSchedule DentistSchedule   `gorm:"foreignKey:DentistScheduleID" json:"dentist_schedule,omitempty"`
+	Service         ServiceType       `gorm:"foreignKey:ServiceID" json:"service,omitempty"`
+	Status          AppointmentStatus `gorm:"foreignKey:StatusID" json:"status,omitempty"`
 }
 
 type AppointmentStatus struct {

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"backend/internal/dto"
 	models "backend/internal/model"
 	"backend/internal/repository"
 	"errors"
@@ -64,4 +65,29 @@ func (s *AuthService) Login(identity, password string) (string, error) {
 	}
 
 	return tokenString, nil
+}
+func (s *AuthService) Register(req dto.RegisterRequest) error {
+	// 1. Hash Password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	// 2. เตรียม User Model (ตัด FirstName, LastName ออก)
+	user := &models.User{
+		UserName:     req.UserName,
+		Email:        req.Email,
+		PasswordHash: string(hashedPassword),
+		RoleID:       2, // สมมติ 2 คือ Patient
+		IsActive:     true,
+	}
+
+	// 3. เตรียม Patient Model (แบบว่างๆ ไว้ก่อน หรือใส่ค่า Default)
+	patient := &models.Patient{
+		// ID จะถูกเติมให้ใน Repository หลังบันทึก User
+		UpdatedAt: time.Now(),
+	}
+
+	// 4. บันทึกผ่าน Repo ด้วย Transaction
+	return s.repo.RegisterPatient(user, patient)
 }

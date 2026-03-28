@@ -8,13 +8,13 @@ type User struct {
 	Email        string    `gorm:"unique;not null" json:"email"`
 	PasswordHash string    `json:"-"`
 	RoleID       uint      `json:"role_id"`
+	Phone        string    `gorm:"type:varchar(20)" json:"phone"`
 	IsActive     bool      `gorm:"default:true" json:"is_active"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 
 	Role    Role     `gorm:"foreignKey:RoleID" json:"role"`
 	Patient *Patient `gorm:"foreignKey:ID" json:"patient,omitempty"`
-	Staff   *Staff   `gorm:"foreignKey:ID" json:"staff,omitempty"`
 
 	Notifications []Notifications `gorm:"foreignKey:UserID" json:"notifications"`
 }
