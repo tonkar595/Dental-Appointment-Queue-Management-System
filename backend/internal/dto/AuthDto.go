@@ -8,8 +8,9 @@ type LoginRequest struct {
 
 // LoginResponse ใช้สำหรับส่งข้อมูลกลับ (ถ้าต้องการซ่อนบางฟิลด์)
 type LoginResponse struct {
-	Token string `json:"token"`
-	Type  string `json:"type"`
+	Message string `json:"message"`
+	Token   string `json:"token"`
+	Type    string `json:"type"`
 }
 
 // type RegisterRequest struct {
@@ -25,4 +26,5 @@ type RegisterRequest struct {
 	UserName string `json:"user_name" validate:"required"`
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=6"`
+	Phone    string `json:"phone"`
 }

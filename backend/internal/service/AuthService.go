@@ -73,21 +73,26 @@ func (s *AuthService) Register(req dto.RegisterRequest) error {
 		return err
 	}
 
-	// 2. เตรียม User Model (ตัด FirstName, LastName ออก)
+	// 2. เตรียม User Model (Phone ย้ายมาอยู่ที่นี่แล้ว)
 	user := &models.User{
 		UserName:     req.UserName,
 		Email:        req.Email,
 		PasswordHash: string(hashedPassword),
-		RoleID:       2, // สมมติ 2 คือ Patient
+		Phone:        req.Phone, // บันทึกเบอร์โทรที่ตาราง User
+		RoleID:       2,         // 2 คือ Patient ตามตาราง Roles
 		IsActive:     true,
 	}
 
-	// 3. เตรียม Patient Model (แบบว่างๆ ไว้ก่อน หรือใส่ค่า Default)
+	// 3. เตรียม Patient Model (เก็บข้อมูลสุขภาพ)
 	patient := &models.Patient{
-		// ID จะถูกเติมให้ใน Repository หลังบันทึก User
 		UpdatedAt: time.Now(),
 	}
 
-	// 4. บันทึกผ่าน Repo ด้วย Transaction
+	err = s.repo.RegisterPatient(user, patient)
+	if err != nil {
+		return err // ส่ง Error ที่เราดักไว้ขึ้นไป
+	}
+
+	// 4. ส่งไปบันทึกที่ Repo
 	return s.repo.RegisterPatient(user, patient)
 }
