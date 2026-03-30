@@ -47,9 +47,13 @@ func (r *UserRepository) FindByPhone(phone string) (*models.User, error) {
 
 func (r *UserRepository) RegisterPatient(user *models.User, patient *models.Patient) error {
 	return r.db.Transaction(func(tx *gorm.DB) error {
+
+		user.ID = 0
+
 		if err := tx.Create(user).Error; err != nil {
 			// ดักจับ Error จาก Postgres (Unique Violation)
 			var pgErr *pgconn.PgError
+
 			if errors.As(err, &pgErr) && pgErr.Code == "23505" {
 				// พยายามระบุว่าอะไรซ้ำ (Email, Username หรือ Phone)
 				if strings.Contains(pgErr.Detail, "email") {
@@ -66,7 +70,8 @@ func (r *UserRepository) RegisterPatient(user *models.User, patient *models.Pati
 			return err
 		}
 
-		patient.ID = user.ID
+		patient.UserID = user.ID
+		patient.ID = 0
 		if err := tx.Create(patient).Error; err != nil {
 			return err
 		}

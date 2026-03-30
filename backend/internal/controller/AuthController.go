@@ -91,5 +91,8 @@ func (c *AuthController) Logout(ctx *fiber.Ctx) error {
 		Expires:  time.Now().Add(-time.Hour), // ตั้งให้ย้อนหลังเพื่อลบทิ้ง
 		HTTPOnly: true,
 	})
-	return ctx.JSON(fiber.Map{"message": "logged out"})
+	return ctx.JSON(fiber.Map{
+		"message": "logged out successfully",
+		"status":  201,
+	})
 }
