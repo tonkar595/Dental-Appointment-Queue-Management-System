@@ -29,9 +29,9 @@ export default function DentalLandingPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="text-sm font-medium hover:text-[#8f1eae] transition">
+            {/* <button className="text-sm font-medium hover:text-[#8f1eae] transition">
               สำหรับเจ้าหน้าที่
-            </button>
+            </button> */}
 
             <Link href="/login">
               <button className="bg-[#8f1eae] text-white px-5 py-2 rounded-lg text-lg font-bold hover:opacity-90 transition flex items-center gap-2">

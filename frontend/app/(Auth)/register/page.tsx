@@ -16,14 +16,14 @@ export default function RegisterPage() {
 
         <RegisterForm/>
 
-        <div className="mt-8 text-center">
+        {/* <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
             have a account?{" "}
             <Link href="/login" className="text-[#8f1eae] font-bold underline">
               Sign in
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
