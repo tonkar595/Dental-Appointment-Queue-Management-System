@@ -11,7 +11,7 @@ export default function LoginPage() {
       <div className="bg-white w-full max-w-md rounded-[2rem] shadow-xl p-10">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black text-[#8f1eae] mb-2">SIGN IN</h1>
-          <p className="text-gray-500 italic">ยินดีต้อนรับกลับมาอีกครั้ง</p>
+          <p className="text-gray-500 ">ยินดีต้อนรับกลับมาอีกครั้ง</p>
         </div>
 
         <LoginForm />
