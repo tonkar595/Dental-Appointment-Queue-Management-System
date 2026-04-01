@@ -8,84 +8,110 @@
 //   );
 // }
 
-import React from 'react';
-import { ArrowRight, Code2, Layout, Zap } from 'lucide-react';
+import React from "react";
+import { Calendar, User, Clock, ChevronRight, LogIn } from "lucide-react";
+import ServiceCard from "./components/ui/servicecard";
+import Link from "next/link";
 
-export default function HomePage() {
+export default function DentalLandingPage() {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-[#eeeeee] text-slate-800 font-sans">
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-        <div className="text-2xl font-bold tracking-tight text-blue-600">DevStudio</div>
-        <div className="hidden md:flex space-x-8 font-medium">
-          <a href="#" className="hover:text-blue-600 transition">Solutions</a>
-          <a href="#" className="hover:text-blue-600 transition">Showcase</a>
-          <a href="#" className="hover:text-blue-600 transition">About us</a>
+      <nav className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-[#8f1eae] rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">D</span>
+            </div>
+            <span className="text-xl font-bold tracking-tight text-[#8f1eae]">
+              DentalPlus
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button className="text-sm font-medium hover:text-[#8f1eae] transition">
+              สำหรับเจ้าหน้าที่
+            </button>
+
+            <Link href="/login">
+              <button className="bg-[#8f1eae] text-white px-5 py-2 rounded-lg text-lg font-bold hover:opacity-90 transition flex items-center gap-2">
+                <LogIn size={22} /> เข้าสู่ระบบ
+              </button>
+            </Link>
+          </div>
         </div>
-        <button className="bg-slate-900 text-white px-5 py-2 rounded-full font-medium hover:bg-slate-800 transition">
-          Contact Us
-        </button>
       </nav>
 
       {/* Hero Section */}
-      <header className="px-8 py-20 max-w-7xl mx-auto text-center md:py-32">
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-          Build faster with <span className="text-blue-600">Modern Stack</span>
-        </h1>
-        <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
-          สัมผัสประสบการณ์การพัฒนาเว็บไซต์ที่รวดเร็วและมีประสิทธิภาพสูงสุด 
-          ด้วยโครงสร้างที่ออกแบบมาเพื่อรองรับการขยายตัวในอนาคต
-        </p>
-        <div className="flex flex-col md:flex-row justify-center gap-4">
-          <button className="bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-            Get Started <ArrowRight size={20} />
-          </button>
-          <button className="border border-slate-200 px-8 py-4 rounded-xl font-semibold hover:bg-slate-50 transition">
-            View Documentation
-          </button>
+      <header className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h1 className="text-4xl md:text-6xl font-black leading-tight mb-6">
+            จองคิวทำฟัน <br />
+            <span className="text-[#8f1eae]">ง่ายเพียงปลายนิ้ว</span>
+          </h1>
+          <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+            ระบบจัดการคิวทันตกรรมอัจฉริยะ ตรวจสอบสถานะคิวแบบ Real-time
+            และจัดการประวัติการรักษาของคุณได้ในที่เดียว
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <button className="bg-[#8f1eae] text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-purple-200 hover:-translate-y-1 transition-all flex items-center gap-2">
+              เริ่มจองการรักษาใหม่ <ChevronRight />
+            </button>
+            <button className="bg-white border-2 border-gray-200 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all">
+              ดูประวัติการจอง
+            </button>
+          </div>
         </div>
+
+        {/* Quick Status Card - อ้างอิงจากสถานะคิวในหน้า Dashboard [cite: 58, 64] */}
+        {/* <div className="bg-white p-8 rounded-[2rem] shadow-xl border border-gray-100">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-bold text-xl">สถานะคิวของคุณ</h3>
+            <span className="bg-purple-100 text-[#8f1eae] text-xs font-bold px-3 py-1 rounded-full">LIVE</span>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 p-4 bg-[#eeeeee] rounded-xl font-medium">
+              <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-[#8f1eae]">
+                <Clock />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">รหัสคิว [cite: 63]</p>
+                <p className="text-lg font-bold">DT-001</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-4 bg-[#eeeeee] rounded-xl font-medium">
+              <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-[#8f1eae]">
+                <User />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">สถานะปัจจุบัน [cite: 64]</p>
+                <p className="text-lg font-bold text-[#8f1eae]">รอเรียกคิว</p>
+              </div>
+            </div>
+          </div>
+        </div> */}
       </header>
 
-      {/* Features Section */}
-      <section className="bg-slate-50 py-24 px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-12">
-            <FeatureCard 
-              icon={<Zap className="text-blue-600" />}
-              title="High Performance"
-              description="รีโหลดหน้าเว็บได้อย่างรวดเร็วด้วยการทำ Server-side Rendering และ Optimization ที่ยอดเยี่ยม"
-            />
-            <FeatureCard 
-              icon={<Layout className="text-blue-600" />}
-              title="Responsive Design"
-              description="แสดงผลได้อย่างสวยงามในทุกหน้าจอ ไม่ว่าจะเป็นมือถือ แท็บเล็ต หรือเดสก์ท็อป"
-            />
-            <FeatureCard 
-              icon={<Code2 className="text-blue-600" />}
-              title="Clean Code"
-              description="เขียนโค้ดได้ง่ายและเป็นระเบียบด้วย TypeScript พร้อมการจัดการสไตล์ด้วย Tailwind CSS"
-            />
+      {/* Services Section - อ้างอิงจากหน้าบริการ [cite: 13, 203] */}
+      <section className="bg-white py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">บริการของเรา</h2>
+            <div className="w-20 h-1 bg-[#8f1eae] mx-auto"></div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <ServiceCard title="จัดฟัน" icon={<Calendar />} />
+            <ServiceCard title="อุดฟัน" icon={<User />} />
+            <ServiceCard title="ตรวจสุขภาพฟัน" icon={<Clock />} />
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 text-center border-t border-slate-100 text-slate-500 text-sm">
-        <p>© 2026 DevStudio Inc. All rights reserved.</p>
-      </footer>
-    </div>
-  );
-}
-
-// Sub-component สำหรับการแสดง Feature
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
-  return (
-    <div className="bg-white p-8 rounded-2xl border border-slate-100 hover:border-blue-200 transition-all hover:shadow-xl group">
-      <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-        {icon}
-      </div>
-      <h3 className="text-xl font-bold mb-3">{title}</h3>
-      <p className="text-slate-600 leading-relaxed">{description}</p>
+      {/* <footer className="py-12 bg-[#eeeeee] border-t border-gray-200 text-center">
+        <p className="text-gray-500 text-sm">© 2026 Dental Management System. Built with Next.js & Tailwind CSS</p>
+      </footer> */}
     </div>
   );
 }
