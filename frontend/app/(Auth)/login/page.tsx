@@ -15,8 +15,8 @@ export default function LoginPage() {
         </div>
 
         <LoginForm />
-        
-        <div className="mt-8 text-center">
+
+        {/* <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
             new user?{" "}
             <Link
@@ -26,7 +26,7 @@ export default function LoginPage() {
               Sign up
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
