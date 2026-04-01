@@ -88,11 +88,6 @@ func (s *AuthService) Register(req dto.RegisterRequest) error {
 		UpdatedAt: time.Now(),
 	}
 
-	err = s.repo.RegisterPatient(user, patient)
-	if err != nil {
-		return err // ส่ง Error ที่เราดักไว้ขึ้นไป
-	}
-
 	// 4. ส่งไปบันทึกที่ Repo
 	return s.repo.RegisterPatient(user, patient)
 }

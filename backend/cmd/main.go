@@ -23,7 +23,7 @@ func main() {
 
 	container := wire.NewContainer(db.DB)
 
-	routers.SetupRoutes(app, container.UserController)
+	routers.SetupRoutes(app, container)
 
 	app.Listen(":8080")
 

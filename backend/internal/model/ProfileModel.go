@@ -3,12 +3,13 @@ package models
 import "time"
 
 type Patient struct {
-	ID                 uint      `gorm:"primaryKey" json:"id"` // FK to User.ID
+	ID                 uint      `gorm:"primaryKey;autoIncrement" json:"id"`
+	UserID             uint      `gorm:"column:user_id;not null" json:"user_id"` // FK to User.ID
 	BirthDate          time.Time `json:"birth_date"`
 	MedicalCondition   string    `gorm:"type:text" json:"medical_condition"`
 	AllergicMedication string    `gorm:"type:text" json:"allergic_medication"`
 	UpdatedAt          time.Time `json:"updated_at"`
-	User               User      `gorm:"foreignKey:ID;references:ID" json:"-"`
+	User               User      `gorm:"foreignKey:UserID" json:"-"`
 }
 
 // type Staff struct {

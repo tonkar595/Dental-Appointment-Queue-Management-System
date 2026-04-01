@@ -2,12 +2,13 @@ package middleware
 
 import (
 	"errors"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func DeserializeUser(c *fiber.Ctx) error {
+func AuthMiddleware(c *fiber.Ctx) error {
 	// 1. ดึง Token จาก Cookie
 	tokenString := c.Cookies("jwt")
 
@@ -23,7 +24,14 @@ func DeserializeUser(c *fiber.Ctx) error {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("unexpected signing method")
 		}
-		return []byte("your_secret_key"), nil // ต้องตรงกับใน AuthService
+
+		// --- แก้ไขตรงนี้: ดึงค่าจาก .env แทนการ Hardcode ---
+		secret := os.Getenv("JWT_SECRET")
+		if secret == "" {
+			// กันเหนียวไว้ถ้าลืมตั้งค่าใน .env ให้ใช้ค่า default หรือแจ้ง error
+			secret = "default_secret_fallback"
+		}
+		return []byte(secret), nil
 	})
 
 	if err != nil || !token.Valid {
@@ -38,7 +46,7 @@ func DeserializeUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "invalid token claims"})
 	}
 
-	// 4. เก็บข้อมูลไว้ใน Locals เพื่อให้ Controller อื่นเรียกใช้ได้ง่ายๆ
+	// 4. เก็บข้อมูลไว้ใน Locals
 	c.Locals("user_id", claims["user_id"])
 	c.Locals("role", claims["role"])
 
