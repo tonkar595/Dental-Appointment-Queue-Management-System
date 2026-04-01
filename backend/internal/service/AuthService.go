@@ -24,7 +24,7 @@ func isEmail(identifier string) bool {
 	return strings.Contains(identifier, "@")
 }
 
-func (s *AuthService) Login(identity, password string) (string, error) {
+func (s *AuthService) Login(identity, password string) (string, string, error) {
 	var user *models.User
 	var err error
 
@@ -37,14 +37,14 @@ func (s *AuthService) Login(identity, password string) (string, error) {
 
 	// ถ้า query แล้วเกิด error หรือไม่พบ user
 	if err != nil {
-		return "", errors.New("invalid credentials")
+		return "", "", errors.New("invalid credentials")
 	}
 
 	// 2. ตรวจสอบ Password (เปรียบเทียบ password ที่รับมากับ hash ใน DB)
 	// user.PasswordHash คือตัวแปรที่เราเก็บไว้ใน model User
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
-		return "", errors.New("invalid credentials")
+		return "", "", errors.New("invalid credentials")
 	}
 
 	// 3. สร้าง JWT Token เมื่อตรวจสอบผ่านแล้ว
@@ -61,10 +61,10 @@ func (s *AuthService) Login(identity, password string) (string, error) {
 	// หมายเหตุ: ควรดึง "your_secret_key" มาจาก os.Getenv("JWT_SECRET") เพื่อความปลอดภัย
 	tokenString, err := token.SignedString([]byte("your_secret_key"))
 	if err != nil {
-		return "", errors.New("could not generate token")
+		return "", "", errors.New("could not generate token")
 	}
 
-	return tokenString, nil
+	return tokenString, user.Role.RoleName, nil
 }
 func (s *AuthService) Register(req dto.RegisterRequest) error {
 	// 1. Hash Password

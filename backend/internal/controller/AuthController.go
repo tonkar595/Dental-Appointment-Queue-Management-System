@@ -25,7 +25,7 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	}
 
 	// 1. เรียก Service เพื่อยืนยันตัวตนและรับ Token
-	token, err := c.service.Login(req.Identity, req.Password)
+	token, roleName, err := c.service.Login(req.Identity, req.Password)
 	if err != nil {
 		return ctx.Status(401).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -44,9 +44,10 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	// 3. ตอบกลับ (ไม่ต้องส่ง Token ไปใน Body แล้วก็ได้ หรือจะส่งไปทั้งคู่ก็ไม่ผิดครับ)
 
 	return ctx.JSON(dto.LoginResponse{
-		Message: "login successful",
-		Token:   token,
-		Type:    "Bearer",
+		Message:  "login successful",
+		Token:    token,
+		Type:     "Bearer",
+		RoleName: roleName,
 	})
 }
 
