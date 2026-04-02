@@ -25,10 +25,9 @@ func AuthMiddleware(c *fiber.Ctx) error {
 			return nil, errors.New("unexpected signing method")
 		}
 
-		// --- แก้ไขตรงนี้: ดึงค่าจาก .env แทนการ Hardcode ---
 		secret := os.Getenv("JWT_SECRET")
 		if secret == "" {
-			// กันเหนียวไว้ถ้าลืมตั้งค่าใน .env ให้ใช้ค่า default หรือแจ้ง error
+
 			secret = "default_secret_fallback"
 		}
 		return []byte(secret), nil
