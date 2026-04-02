@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* กำหนดโทนสีจากดีไซน์ Dashboard */
+  --brand-purple: #8f1eae;
+  --brand-gray: #eeeeee;
+}
+
+@layer base {
+  body {
+    @apply bg-[#eeeeee] text-slate-800; /* กำหนดสีพื้นหลังหลักของหน้าเว็บ */
+  }
+}

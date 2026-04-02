@@ -1,0 +1,16 @@
+services:
+  postgres_2:
+    image: postgres:16
+    container_name: Dental_db_2
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: denteldb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_2:/var/lib/postgresql/data
+
+volumes:
+  postgres_data_2:
