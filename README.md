@@ -82,23 +82,23 @@ NEXT_PUBLIC_API_URL=http://localhost:8080/api
 ```
 npm run dev
 ```
-##🔐 Features Implemented
-*User Authentication
+## 🔐 Features Implemented
+* User Authentication
 ระบบสมัครสมาชิก (Register): มาพร้อมระบบ Transaction ป้องกันข้อมูลผิดพลาด และดักจับ Unique Constraint Handling (Username, Email, Phone)
 
-*ระบบเข้าสู่ระบบ (Login): รองรับทั้ง Username/Email และจัดเก็บ JWT ในรูปแบบ HttpOnly Cookie เพื่อความปลอดภัยสูงสุด
+* ระบบเข้าสู่ระบบ (Login): รองรับทั้ง Username/Email และจัดเก็บ JWT ในรูปแบบ HttpOnly Cookie เพื่อความปลอดภัยสูงสุด
 
-*Role-based Access Control
+* Role-based Access Control
 User Roles: แบ่งระดับผู้ใช้งานชัดเจนเป็น Dentist (Admin) และ Patient
 
-*Backend Security: ระบบ Middleware สำหรับตรวจสอบและยืนยันความถูกต้องของ Token ก่อนเข้าถึง API
+* Backend Security: ระบบ Middleware สำหรับตรวจสอบและยืนยันความถูกต้องของ Token ก่อนเข้าถึง API
 
-*Frontend Guard: ใช้ Next.js Middleware ป้องกันการเข้าถึงหน้า Dashboard โดยไม่ได้รับอนุญาต (Unauthorized Access)
+* Frontend Guard: ใช้ Next.js Middleware ป้องกันการเข้าถึงหน้า Dashboard โดยไม่ได้รับอนุญาต (Unauthorized Access)
 
-*CORS & Security
+* CORS & Security
 Cross-Origin Resource Sharing: ตั้งค่า CORS ให้รองรับการรับ-ส่ง Credentials (Cookies) ระหว่าง Next.js และ Fiber อย่างปลอดภัย
 
-##📝 Database Schema (Brief)
+## 📝 Database Schema (Brief)
 Users: เก็บข้อมูลพื้นฐาน (username, email, password_hash, phone, role_id)
 
 Patients: เก็บข้อมูลเพิ่มเติมเฉพาะคนไข้ (user_id, medical_condition, allergic_medication)
