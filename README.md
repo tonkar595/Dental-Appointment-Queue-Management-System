@@ -1,29 +1,28 @@
-🦷 Dental Appointment Queue Management System
-ระบบจัดการคิวและนัดหมายคลินิกทันตกรรม พัฒนาด้วย Go (Fiber) และ Next.js (App Router)
+# 🦷 Dental Appointment Queue Management System
+ระบบจัดการคิวและนัดหมายคลินิกทันตกรรม พัฒนาด้วยเทคโนโลยี Full-stack สมัยใหม่
 
-🚀 Tech Stack
-Backend
-Language: Go 1.2x
+---
 
-Framework: Fiber v2
+## 🚀 Tech Stack
 
-ORM: GORM
+### Backend
+* **Language:** Go 1.2x
+* **Framework:** [Fiber v2](https://gofiber.io/)
+* **ORM:** [GORM](https://gorm.io/)
+* **Database:** PostgreSQL
+* **Authentication:** JWT (JSON Web Token) with **HttpOnly Cookies**
 
-Database: PostgreSQL
+### Frontend
+* **Framework:** [Next.js 14+ (App Router)](https://nextjs.org/)
+* **Styling:** Tailwind CSS
+* **HTTP Client:** Axios / Fetch API
+* **State Management:** React Hooks (useState, useEffect)
 
-Authentication: JWT (JSON Web Token) with HttpOnly Cookies
+---
 
-Frontend
-Framework: Next.js 14+ (App Router)
+## 📂 Project Structure
 
-Styling: Tailwind CSS
-
-HTTP Client: Axios / Fetch API
-
-State Management: React Hooks (useState, useEffect)
-
-📂 Project Structure
-Plaintext
+```plaintext
 .
 ├── backend/
 │   ├── internal/
@@ -33,7 +32,7 @@ Plaintext
 │   │   ├── repository/   # Database Operations (Transactions)
 │   │   └── service/      # Business Logic (Hashing, JWT Signing)
 │   ├── dto/              # Data Transfer Objects
-│   ├── .env              # Environment Variables (JWT_SECRET, DB_URL)
+│   ├── .env              # Environment Variables
 │   └── main.go           # Entry Point
 │
 └── frontend/
@@ -41,19 +40,23 @@ Plaintext
     │   ├── (Auth)/       # Login & Register Pages
     │   ├── dentist/      # Dentist Dashboard (Protected)
     │   └── patient/      # Patient Dashboard (Protected)
-    ├── components/       # Shared UI Components (Forms, Navbar)
+    ├── components/       # Shared UI Components
     └── middleware.ts     # Next.js Middleware for Auth Guard
-🛠️ Installation & Setup
-1. Backend Setup
-เข้าไปที่โฟลเดอร์ backend:
 
-Bash
+## 🛠️ Installation & Setup
+###1. Backend Setup
+1. เข้าไปที่โฟลเดอร์ `backend`:
+
+```
 cd backend
-สร้างไฟล์ .env และกำหนดค่า:
 
-ข้อมูลโค้ด
+2. สร้างไฟล์ .env และกำหนดค่า:
+
+```
 DB_URL=host=localhost user=postgres password=yourpassword dbname=dental_db port=5432 sslmode=disable
 JWT_SECRET=your_super_secret_key
+
+
 รันโปรเจกต์:
 
 Bash
@@ -76,25 +79,24 @@ NEXT_PUBLIC_API_URL=http://localhost:8080/api
 Bash
 npm run dev
 🔐 Features Implemented
-User Authentication: * ระบบสมัครสมาชิก (Register) พร้อมระบบ Transaction ป้องกันข้อมูลซ้ำ (Unique Constraint Handling)
+User Authentication
+ระบบสมัครสมาชิก (Register): มาพร้อมระบบ Transaction ป้องกันข้อมูลผิดพลาด และดักจับ Unique Constraint Handling (Username, Email, Phone)
 
-ระบบเข้าสู่ระบบ (Login) ด้วย Username/Email และจัดเก็บ JWT ใน HttpOnly Cookie
+ระบบเข้าสู่ระบบ (Login): รองรับทั้ง Username/Email และจัดเก็บ JWT ในรูปแบบ HttpOnly Cookie เพื่อความปลอดภัยสูงสุด
 
-Role-based Access Control:
+Role-based Access Control
+User Roles: แบ่งระดับผู้ใช้งานชัดเจนเป็น Dentist (Admin) และ Patient
 
-แบ่งระดับผู้ใช้งานเป็น Dentist (Admin) และ Patient
+Backend Security: ระบบ Middleware สำหรับตรวจสอบและยืนยันความถูกต้องของ Token ก่อนเข้าถึง API
 
-ระบบ Middleware ฝั่ง Backend สำหรับตรวจสอบ Token
+Frontend Guard: ใช้ Next.js Middleware ป้องกันการเข้าถึงหน้า Dashboard โดยไม่ได้รับอนุญาต (Unauthorized Access)
 
-ระบบ Middleware ฝั่ง Frontend สำหรับป้องกันการเข้าหน้า Dashboard โดยไม่ได้รับอนุญาต
-
-CORS & Security:
-
-ตั้งค่า CORS ให้รองรับการรับ-ส่ง Credentials (Cookies) ระหว่าง Next.js และ Fiber
+CORS & Security
+Cross-Origin Resource Sharing: ตั้งค่า CORS ให้รองรับการรับ-ส่ง Credentials (Cookies) ระหว่าง Next.js และ Fiber อย่างปลอดภัย
 
 📝 Database Schema (Brief)
 Users: เก็บข้อมูลพื้นฐาน (username, email, password_hash, phone, role_id)
 
-Patients: เก็บข้อมูลเพิ่มเติมสำหรับคนไข้ (user_id, medical_condition, allergic_medication)
+Patients: เก็บข้อมูลเพิ่มเติมเฉพาะคนไข้ (user_id, medical_condition, allergic_medication)
 
-Roles: นิยามสิทธิ์ (1: Dentist, 2: Patient)
+Roles: นิยามสิทธิ์การใช้งาน (1: Dentist, 2: Patient)
