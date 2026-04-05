@@ -19,6 +19,7 @@ func main() {
 	}
 	db.DatabaseConnected()
 	// db.AutoMigrate(db.DB)
+	db.SeedStatuses(db.DB)
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{

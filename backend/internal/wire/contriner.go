@@ -12,6 +12,7 @@ type Container struct {
 	UserController      *controller.UserController
 	AuthController      *controller.AuthController
 	DentalAddController *controller.DentalAddController
+	ClinicController    *controller.ClinicController
 }
 
 func NewContainer(db *gorm.DB) *Container {
@@ -24,10 +25,14 @@ func NewContainer(db *gorm.DB) *Container {
 	dentalAddService := service.NewDentalAddService(ServiceRepo)
 	dentalAddController := controller.NewDentalAddController(dentalAddService)
 	// appointmentRepo := repository.NewAppointmentRepository(db)
+	clinicRepo := repository.NewClinicRepository(db)
+	clinicService := service.NewClinicService(clinicRepo)
+	clinicController := controller.NewClinicController(clinicService)
 
 	return &Container{
 		UserController:      userController,
 		AuthController:      authController,
 		DentalAddController: dentalAddController,
+		ClinicController:    clinicController,
 	}
 }
