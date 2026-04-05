@@ -34,7 +34,7 @@ func AuthMiddleware(c *fiber.Ctx) error {
 		}
 
 		secret := os.Getenv("JWT_SECRET")
-		fmt.Println("JWT_TOKEN : ", secret)
+		// fmt.Println("JWT_TOKEN : ", secret)
 		if secret == "" {
 
 			secret = "default_secret_fallback"
