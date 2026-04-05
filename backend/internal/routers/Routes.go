@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"backend/internal/middleware"
 	"backend/internal/wire"
 
 	"github.com/gofiber/fiber/v2"
@@ -8,11 +9,17 @@ import (
 
 func SetupRoutes(app *fiber.App, c *wire.Container) {
 	api := app.Group("/api")
-	// users := api.Group("/users")
+
 	api.Post("/login", c.AuthController.Login)
 	api.Post("/register", c.AuthController.Register)
 	api.Post("/logout", c.AuthController.Logout)
+	//==========================Dentist===============================================
+	dentistGroup := api.Group("/dentist", middleware.AuthMiddleware, middleware.RoleChecker("Dentist"))
+	dentistGroup.Post("/createdService", c.DentalAddController.Create)
+	dentistGroup.Get("/show-all", c.DentalAddController.GetAll)
+	dentistGroup.Get("/show/:id", c.DentalAddController.GetByID)
 
-	// users.Post("/create", controller.Create)
-	// users.Get("/get-all", controller.GetAll)
+	//==========================Patient===============================================
+	// patientGroup := api.Group("/patient", middleware.RoleChecker("Patient"))
+
 }
