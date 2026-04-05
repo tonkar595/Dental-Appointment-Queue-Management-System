@@ -4,8 +4,8 @@ import "time"
 
 type ClinicSchedule struct {
 	ClinicDate time.Time `gorm:"primaryKey;type:date" json:"clinic_date"`
-	OpenTime   time.Time `json:"open_time"`
-	CloseTime  time.Time `json:"close_time"`
+	OpenTime   string    `json:"open_time"`
+	CloseTime  string    `json:"close_time"`
 	IsOpen     bool      `json:"is_open"`
 	Note       string    `json:"note"`
 	CreatedAt  time.Time `json:"created_at"`

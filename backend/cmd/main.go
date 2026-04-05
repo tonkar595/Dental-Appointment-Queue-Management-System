@@ -4,21 +4,29 @@ import (
 	db "backend/internal/db"
 	"backend/internal/routers"
 	"backend/internal/wire"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	db.DatabaseConnected()
 	// db.AutoMigrate(db.DB)
+	db.SeedStatuses(db.DB)
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000", // เปลี่ยนเป็น Domain ของ Frontend คุณ
+		AllowOrigins:     "http://localhost:3000",
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS, PATCH",
-		AllowCredentials: true, // สำคัญมาก! เพื่อให้รับ-ส่ง Cookies ได้
+		AllowCredentials: true,
 	}))
 
 	container := wire.NewContainer(db.DB)
