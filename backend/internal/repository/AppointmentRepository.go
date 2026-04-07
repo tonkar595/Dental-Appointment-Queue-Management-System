@@ -67,3 +67,86 @@ func (r *AppointmentRepository) ValidatePatient(patientID uint) (bool, error) {
 	// ถ้าชื่อ Role เป็น Dentist แสดงว่า ID นี้คือหมอปลอมตัวมาเป็นคนไข้
 	return roleName == "Dentist", nil
 }
+
+// func (r *AppointmentRepository) GetAll() ([]models.Appointment, error) {
+// 	var appointments []models.Appointment
+// 	err := r.db.
+// 		Preload("Patient").
+// 		Preload("Staff").
+// 		Preload("Service").
+// 		Preload("Status").
+// 		Order("appointment_start ASC").
+// 		Find(&appointments).Error
+// 	return appointments, err
+// }
+
+// // ดึงนัดหมายแยกตามวันที่ (สำคัญมากสำหรับหน้า Dashboard คลินิก)
+// func (r *AppointmentRepository) GetByDate(date string) ([]models.Appointment, error) {
+// 	var appointments []models.Appointment
+// 	err := r.db.
+// 		Preload("Patient").
+// 		Preload("Service").
+// 		Preload("Status").
+// 		Where("DATE(appointment_start) = ?", date).
+// 		Order("appointment_start ASC").
+// 		Find(&appointments).Error
+// 	return appointments, err
+// }
+
+// // ดึงนัดหมายเฉพาะของคนไข้คนนั้นๆ
+// func (r *AppointmentRepository) GetByPatientID(patientID uint) ([]models.Appointment, error) {
+// 	var appointments []models.Appointment
+// 	err := r.db.
+// 		Preload("Staff").
+// 		Preload("Service").
+// 		Preload("Status").
+// 		Where("patient_id = ?", patientID).
+// 		Order("appointment_start DESC").
+// 		Find(&appointments).Error
+// 	return appointments, err
+// }
+
+func (r *AppointmentRepository) GetByDate(date string) ([]models.Appointment, error) {
+	var appointments []models.Appointment
+	err := r.db.
+		// Preload Patient และ User ของ Patient เพื่อเอาชื่อ
+		Preload("Patient.User").
+		// Preload Staff (ซึ่งเชื่อมกับตาราง users)
+		Preload("Staff").
+		Preload("Service").
+		Preload("Status").
+		Where("DATE(appointment_start) = ?", date).
+		Order("appointment_start ASC").
+		Find(&appointments).Error
+
+	return appointments, err
+}
+
+func (r *AppointmentRepository) GetAll() ([]models.Appointment, error) {
+	var appointments []models.Appointment
+	err := r.db.
+		Preload("Patient.User").
+		Preload("Staff").
+		Preload("Service").
+		Preload("Status").
+		Order("appointment_start ASC").
+		Find(&appointments).Error
+	return appointments, err
+}
+
+// ดึงประวัติคนไข้
+func (r *AppointmentRepository) GetByPatientID(patientID uint) ([]models.Appointment, error) {
+	var appointments []models.Appointment
+	err := r.db.
+		Preload("Patient.User"). // ต้องดึง User ของ Patient มาด้วยเพื่อเอาชื่อ
+		Preload("Staff", func(db *gorm.DB) *gorm.DB {
+			// ดึงฟิลด์ที่จำเป็นต้องใช้ใน DTO มาให้ครบ
+			return db.Select("id", "user_name", "email", "phone")
+		}).
+		Preload("Service").
+		Preload("Status").
+		Where("patient_id = ?", patientID).
+		Order("appointment_start DESC").
+		Find(&appointments).Error
+	return appointments, err
+}

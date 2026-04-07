@@ -82,3 +82,101 @@ func (s *AppointmentService) CreateAppointment(req dto.CreateAppointmentRequest)
 
 	return s.repo.Create(appointment)
 }
+
+func (s *AppointmentService) GetAppointments(date string) ([]dto.AppointmentResponse, error) {
+	appointments, err := s.repo.GetByDate(date)
+	if err != nil {
+		return nil, err
+	}
+
+	var response []dto.AppointmentResponse
+	for _, a := range appointments {
+		res := dto.AppointmentResponse{
+			ID:               a.ID,
+			AppointmentStart: a.AppointmentStart,
+			AppointmentEnd:   a.AppointmentEnd,
+			TreatmentNote:    a.TreatmentNote,
+			IsWalkIn:         a.IsWalkIn,
+
+			// Mapping Layer: Patient
+			Patient: dto.PatientDTO{
+				ID:   a.PatientID,
+				Name: a.Patient.User.UserName,
+			},
+
+			// Mapping Layer: Staff
+			Staff: dto.StaffDTO{
+				ID:    a.StaffID,
+				Name:  a.Staff.UserName,
+				Email: a.Staff.Email,
+				Phone: a.Staff.Phone,
+			},
+
+			// Mapping Layer: Service
+			Service: dto.ServiceDTO{
+				ID:       a.ServiceID,
+				Name:     a.Service.ServiceName,
+				Duration: a.Service.DurationMinutes,
+			},
+
+			// Mapping Layer: Status
+			Status: dto.StatusDTO{
+				ID:   a.StatusID,
+				Name: a.Status.StatusName,
+			},
+		}
+		response = append(response, res)
+	}
+
+	return response, nil
+}
+
+// ดูประวัตินัดหมายของคนไข้
+func (s *AppointmentService) GetPatientHistory(patientID uint) ([]dto.AppointmentResponse, error) {
+	appointments, err := s.repo.GetByPatientID(patientID)
+	if err != nil {
+		return nil, err
+	}
+
+	var response []dto.AppointmentResponse
+	for _, a := range appointments {
+		res := dto.AppointmentResponse{
+			ID:               a.ID,
+			AppointmentStart: a.AppointmentStart,
+			AppointmentEnd:   a.AppointmentEnd,
+			TreatmentNote:    a.TreatmentNote,
+			IsWalkIn:         a.IsWalkIn,
+
+			// Mapping Nested: Patient
+			Patient: dto.PatientDTO{
+				ID:               a.PatientID,
+				Name:             a.Patient.User.UserName,
+				MedicalCondition: a.Patient.MedicalCondition,
+			},
+
+			// Mapping Nested: Staff (ข้อมูลจะมาครบตามที่เรา Query ไว้)
+			Staff: dto.StaffDTO{
+				ID:    a.StaffID,
+				Name:  a.Staff.UserName,
+				Email: a.Staff.Email,
+				Phone: a.Staff.Phone,
+			},
+
+			// Mapping Nested: Service
+			Service: dto.ServiceDTO{
+				ID:       a.ServiceID,
+				Name:     a.Service.ServiceName,
+				Duration: a.Service.DurationMinutes,
+			},
+
+			// Mapping Nested: Status
+			Status: dto.StatusDTO{
+				ID:   a.StatusID,
+				Name: a.Status.StatusName,
+			},
+		}
+		response = append(response, res)
+	}
+
+	return response, nil
+}

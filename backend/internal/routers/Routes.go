@@ -25,6 +25,8 @@ func SetupRoutes(app *fiber.App, c *wire.Container) {
 	dentistGroup.Post("/clinic/schedule", c.ClinicController.SetCustomSchedule)
 	dentistGroup.Get("/clinic/availability", c.ClinicController.CheckAvailability)
 	dentistGroup.Post("/appointments/created", c.AppointmentController.Create)
+	dentistGroup.Get("/appointments/getall", c.AppointmentController.GetAppointments)
+	dentistGroup.Get("/appointments/patient/:id", c.AppointmentController.GetPatientHistory)
 
 	//==========================Patient===============================================
 	// patientGroup := api.Group("/patient", middleware.RoleChecker("Patient"))

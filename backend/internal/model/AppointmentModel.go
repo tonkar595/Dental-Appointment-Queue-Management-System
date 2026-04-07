@@ -13,9 +13,9 @@ type Appointment struct {
 	TreatmentNote    string     `gorm:"type:text" json:"treatment_note"`
 	StatusID         uint       `json:"status_id"`
 	IsWalkIn         bool       `gorm:"default:false" json:"is_walk_in"`
-	CreatedAt        time.Time  `json:"created_at"`
-	UpdatedAt        time.Time  `json:"updated_at"`
-	BookedAt         *time.Time `json:"booked_at"`
+	CreatedAt        time.Time  `json:"-"`
+	UpdatedAt        time.Time  `json:"-"`
+	BookedAt         *time.Time `json:"-"`
 
 	Patient Patient           `gorm:"foreignKey:PatientID" json:"patient,omitempty"`
 	Staff   User              `gorm:"foreignKey:StaffID" json:"staff,omitempty"` // ชี้ไปที่ User/Staff
@@ -35,4 +35,8 @@ type ServiceType struct {
 	Description     string `json:"description"`
 	DurationMinutes int    `json:"duration_minutes"`
 	IsActive        bool   `gorm:"default:true" json:"is_active"`
+}
+
+func (AppointmentStatus) TableName() string {
+	return "appointment_status"
 }
