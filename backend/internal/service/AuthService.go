@@ -5,6 +5,7 @@ import (
 	models "backend/internal/model"
 	"backend/internal/repository"
 	"errors"
+	"os"
 	"strings"
 	"time"
 
@@ -59,7 +60,7 @@ func (s *AuthService) Login(identity, password string) (string, string, error) {
 
 	// 4. Sign Token ด้วย Secret Key
 	// หมายเหตุ: ควรดึง "your_secret_key" มาจาก os.Getenv("JWT_SECRET") เพื่อความปลอดภัย
-	tokenString, err := token.SignedString([]byte("your_secret_key"))
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return "", "", errors.New("could not generate token")
 	}

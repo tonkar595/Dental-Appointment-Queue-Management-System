@@ -49,3 +49,29 @@ func AutoMigrate(database *gorm.DB) {
 		// &models.Notifications{},
 	)
 }
+
+func SeedStatuses(db *gorm.DB) {
+
+	// Seed AppointmentStatus
+	appStatuses := []models.AppointmentStatus{
+		{ID: 1, StatusName: "Pending", Description: "รอการยืนยัน"},
+		{ID: 2, StatusName: "Confirmed", Description: "ยืนยันนัดแล้ว"},
+		{ID: 3, StatusName: "Checked-in", Description: "คนไข้มาถึงคลินิกแล้ว/รอเข้าพบ"},
+		{ID: 4, StatusName: "In-Progress", Description: "กำลังดำเนินการรักษา"},
+		{ID: 5, StatusName: "Completed", Description: "เสร็จสิ้นการรักษา"},
+		{ID: 6, StatusName: "Cancelled", Description: "ยกเลิกแล้ว"},
+	}
+	for _, s := range appStatuses {
+		db.Table("appointment_status").Where("id = ?", s.ID).FirstOrCreate(&s)
+	}
+
+	// Seed RescheduleStatus
+	reStatuses := []models.RescheduleStatus{
+		{ID: 1, StatusName: "Waiting", Description: "รอหมอพิจารณา"},
+		{ID: 2, StatusName: "Approved", Description: "อนุมัติให้เลื่อนนัดแล้ว"},
+		{ID: 3, StatusName: "Rejected", Description: "ไม่อนุมัติ"},
+	}
+	for _, s := range reStatuses {
+		db.Table("reschedule_status").Where("id = ?", s.ID).FirstOrCreate(&s)
+	}
+}
