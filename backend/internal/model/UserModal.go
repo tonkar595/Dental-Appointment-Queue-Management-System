@@ -10,8 +10,8 @@ type User struct {
 	RoleID       uint      `json:"role_id"`
 	Phone        string    `gorm:"type:varchar(20)" json:"phone"`
 	IsActive     bool      `gorm:"default:true" json:"is_active"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	CreatedAt    time.Time `json:"-"`
+	UpdatedAt    time.Time `json:"-"`
 
 	Role    Role     `gorm:"foreignKey:RoleID" json:"role"`
 	Patient *Patient `gorm:"foreignKey:ID" json:"patient,omitempty"`
