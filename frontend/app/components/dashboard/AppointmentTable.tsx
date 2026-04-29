@@ -8,13 +8,14 @@ import {
   flexRender,
   createColumnHelper,
   SortingState,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { Plus, ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
 import { Appointment } from "../../types/model";
 
 const statusConfig: Record<string, { bg: string; text: string }> = {
-  pending:   { bg: "#8F1EAE", text: "#ffffff" },
+  pending: { bg: "#8F1EAE", text: "#ffffff" },
   confirmed: { bg: "#059669", text: "#ffffff" },
   cancelled: { bg: "#ef4444", text: "#ffffff" },
   "no-show": { bg: "#6b7280", text: "#ffffff" },
@@ -26,7 +27,9 @@ interface AppointmentTableProps {
   appointments: Appointment[];
 }
 
-export default function AppointmentTable({ appointments }: AppointmentTableProps) {
+export default function AppointmentTable({
+  appointments,
+}: AppointmentTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -34,13 +37,17 @@ export default function AppointmentTable({ appointments }: AppointmentTableProps
     columnHelper.accessor("id", {
       header: "No.",
       cell: (info) => (
-        <span className="text-xs text-gray-400 font-mono">{info.getValue()}</span>
+        <span className="text-xs text-gray-400 font-mono">
+          {info.getValue()}
+        </span>
       ),
     }),
     columnHelper.accessor("patientName", {
       header: "Pation name",
       cell: (info) => (
-        <span className="text-xs font-semibold text-gray-700">{info.getValue()}</span>
+        <span className="text-xs font-semibold text-gray-700">
+          {info.getValue()}
+        </span>
       ),
     }),
     columnHelper.accessor("gender", {
@@ -75,6 +82,10 @@ export default function AppointmentTable({ appointments }: AppointmentTableProps
     data: appointments,
     columns,
     state: { sorting, globalFilter },
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: { pageSize: 5, pageIndex: 0 },
+    },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
@@ -116,13 +127,19 @@ export default function AppointmentTable({ appointments }: AppointmentTableProps
                     onClick={header.column.getToggleSortingHandler()}
                   >
                     <span className="flex items-center gap-1">
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                       {header.column.getCanSort() && (
                         <span className="text-gray-300">
                           {header.column.getIsSorted() === "asc" ? (
                             <ChevronUp size={12} style={{ color: "#8F1EAE" }} />
                           ) : header.column.getIsSorted() === "desc" ? (
-                            <ChevronDown size={12} style={{ color: "#8F1EAE" }} />
+                            <ChevronDown
+                              size={12}
+                              style={{ color: "#8F1EAE" }}
+                            />
                           ) : (
                             <ChevronsUpDown size={12} />
                           )}
@@ -149,7 +166,10 @@ export default function AppointmentTable({ appointments }: AppointmentTableProps
             ))}
             {table.getRowModel().rows.length === 0 && (
               <tr>
-                <td colSpan={5} className="py-12 text-center text-sm text-gray-300">
+                <td
+                  colSpan={5}
+                  className="py-12 text-center text-sm text-gray-300"
+                >
                   No appointments found
                 </td>
               </tr>

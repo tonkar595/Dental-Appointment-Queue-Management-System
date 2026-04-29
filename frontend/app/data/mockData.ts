@@ -56,6 +56,22 @@ export const appointments: Appointment[] = [
     reason: "tooth extraction",
     status: "pending",
   },
+  {
+    id: "3cvuiop33",
+    patientName: "Napa Won11gsa",
+    gender: "Female",
+    reason: "tooth extrac11tion",
+    status: "pending",
+  },
+
+  {
+    id: "3cvuiop33",
+    patientName: "Napa Won11gsa",
+    gender: "Female",
+    reason: "tooth extrac11tion",
+    status: "pending",
+  },
+  
 ];
 
 export const upcomingEvents: UpcomingEvent[] = [

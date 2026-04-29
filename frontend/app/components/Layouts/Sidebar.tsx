@@ -21,18 +21,18 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "OVERVIEW", icon: <LayoutDashboard size={16} />, href: "/" },
-  { label: "SERVICE", icon: <Stethoscope size={16} />, href: "/service" },
-  { label: "APPOINTMENT", icon: <CalendarDays size={16} />, href: "/appointment" },
-  { label: "EVENT", icon: <CalendarCheck2 size={16} />, href: "/event" },
-  { label: "PATIENTS", icon: <Users size={16} />, href: "/patients" },
-  { label: "ANALYTICS", icon: <BarChart2 size={16} />, href: "/analytics" },
-  { label: "SETTINGS", icon: <Settings size={16} />, href: "/settings" },
+  { label: "OVERVIEW", icon: <LayoutDashboard size={16} />, href: "/dentist/dashboard" },
+  { label: "SERVICE", icon: <Stethoscope size={16} />, href: "/dentist/service" },
+  { label: "APPOINTMENT", icon: <CalendarDays size={16} />, href: "/dentist/appointment" },
+  { label: "EVENT", icon: <CalendarCheck2 size={16} />, href: "/dentist/event" },
+  { label: "PATIENTS", icon: <Users size={16} />, href: "/dentist/patients" },
+  { label: "ANALYTICS", icon: <BarChart2 size={16} />, href: "/dentist/analytics" },
+  { label: "SETTINGS", icon: <Settings size={16} />, href: "/dentist/settings" },
 ];
 
 const bottomItems: NavItem[] = [
-  { label: "HELP CENTER", icon: <HelpCircle size={16} />, href: "/help" },
-  { label: "LOG OUT", icon: <LogOut size={16} />, href: "/logout" },
+  { label: "HELP CENTER", icon: <HelpCircle size={16} />, href: "/dentist/help" },
+  { label: "LOG OUT", icon: <LogOut size={16} />, href: "/dentist/logout" },
 ];
 
 interface SidebarProps {
