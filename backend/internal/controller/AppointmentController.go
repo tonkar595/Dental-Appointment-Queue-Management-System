@@ -56,3 +56,51 @@ func (c *AppointmentController) GetPatientHistory(ctx *fiber.Ctx) error {
 
 	return ctx.JSON(history)
 }
+
+func (c *AppointmentController) Patch(ctx *fiber.Ctx) error {
+	id, _ := ctx.ParamsInt("id")
+	var req dto.UpdateAppointmentRequest
+
+	if err := ctx.BodyParser(&req); err != nil {
+		return ctx.Status(400).JSON(dto.MessageResponse{
+			Status:  "error",
+			Message: "รูปแบบข้อมูลไม่ถูกต้อง",
+		})
+	}
+
+	err := c.service.PatchAppointment(uint(id), req)
+	if err != nil {
+		return ctx.Status(500).JSON(dto.MessageResponse{
+			Status:  "error",
+			Message: "ไม่สามารถอัปเดตนัดหมายได้: " + err.Error(),
+		})
+	}
+
+	return ctx.Status(200).JSON(dto.MessageResponse{
+		Status:  "success",
+		Message: "อัปเดตนัดหมายเรียบร้อยแล้ว",
+	})
+}
+
+func (c *AppointmentController) Delete(ctx *fiber.Ctx) error {
+	id, err := ctx.ParamsInt("id")
+	if err != nil {
+		return ctx.Status(400).JSON(dto.MessageResponse{
+			Status:  "error",
+			Message: "รหัสนัดหมายไม่ถูกต้อง",
+		})
+	}
+
+	err = c.service.DeleteAppointment(uint(id))
+	if err != nil {
+		return ctx.Status(500).JSON(dto.MessageResponse{
+			Status:  "error",
+			Message: "ลบนัดหมายไม่สำเร็จ: " + err.Error(),
+		})
+	}
+
+	return ctx.Status(200).JSON(dto.MessageResponse{
+		Status:  "success",
+		Message: "ลบนัดหมายเรียบร้อยแล้ว",
+	})
+}

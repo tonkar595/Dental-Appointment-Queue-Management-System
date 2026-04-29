@@ -83,47 +83,35 @@ func (s *AppointmentService) CreateAppointment(req dto.CreateAppointmentRequest)
 	return s.repo.Create(appointment)
 }
 
-func (s *AppointmentService) GetAppointments(date string) ([]dto.AppointmentResponse, error) {
+func (s *AppointmentService) GetAppointments(date string) ([]dto.AllAppointmentResponse, error) {
 	appointments, err := s.repo.GetByDate(date)
 	if err != nil {
 		return nil, err
 	}
 
-	var response []dto.AppointmentResponse
+	var response []dto.AllAppointmentResponse
 	for _, a := range appointments {
-		res := dto.AppointmentResponse{
+		res := dto.AllAppointmentResponse{
 			ID:               a.ID,
 			AppointmentStart: a.AppointmentStart,
 			AppointmentEnd:   a.AppointmentEnd,
 			TreatmentNote:    a.TreatmentNote,
 			IsWalkIn:         a.IsWalkIn,
 
-			// Mapping Layer: Patient
-			Patient: dto.PatientDTO{
-				ID:   a.PatientID,
-				Name: a.Patient.User.UserName,
-			},
+			PatientID:   a.PatientID,
+			PatientName: a.Patient.User.UserName, // ดึงจาก Nested User
 
-			// Mapping Layer: Staff
-			Staff: dto.StaffDTO{
-				ID:    a.StaffID,
-				Name:  a.Staff.UserName,
-				Email: a.Staff.Email,
-				Phone: a.Staff.Phone,
-			},
+			StaffID:    a.StaffID,
+			StaffName:  a.Staff.UserName, // Staff ใน Model คือ User
+			StaffEmail: a.Staff.Email,
+			StaffPhone: a.Staff.Phone,
 
-			// Mapping Layer: Service
-			Service: dto.ServiceDTO{
-				ID:       a.ServiceID,
-				Name:     a.Service.ServiceName,
-				Duration: a.Service.DurationMinutes,
-			},
+			ServiceID:   a.ServiceID,
+			ServiceName: a.Service.ServiceName,
+			Duration:    a.Service.DurationMinutes,
 
-			// Mapping Layer: Status
-			Status: dto.StatusDTO{
-				ID:   a.StatusID,
-				Name: a.Status.StatusName,
-			},
+			StatusID:   a.StatusID,
+			StatusName: a.Status.StatusName,
 		}
 		response = append(response, res)
 	}
@@ -179,4 +167,52 @@ func (s *AppointmentService) GetPatientHistory(patientID uint) ([]dto.Appointmen
 	}
 
 	return response, nil
+}
+
+func (s *AppointmentService) PatchAppointment(id uint, req dto.UpdateAppointmentRequest) error {
+	updateData := make(map[string]interface{})
+
+	// 1. ถ้ามีการเปลี่ยน Service หรือ เวลา ต้องคำนวณเวลาจบใหม่
+	if req.AppointmentStart != nil || req.ServiceID != nil {
+		// ดึงข้อมูลเดิมมาตั้งต้นก่อน
+		existing, _ := s.repo.GetByID(id)
+
+		newStart := existing.AppointmentStart
+		newServiceID := existing.ServiceID
+
+		if req.AppointmentStart != nil {
+			loc, _ := time.LoadLocation("Asia/Bangkok")
+			newStart, _ = time.ParseInLocation("2006-01-02 15:04", *req.AppointmentStart, loc)
+			updateData["appointment_start"] = newStart
+		}
+		if req.ServiceID != nil {
+			newServiceID = *req.ServiceID
+			updateData["service_id"] = newServiceID
+		}
+
+		// คำนวณ EndTime ใหม่ตาม Duration ของ Service
+		duration, _ := s.repo.GetServiceDuration(newServiceID)
+		updateData["appointment_end"] = newStart.Add(time.Duration(duration) * time.Minute)
+	}
+
+	// 2. ฟิลด์อื่นๆ ที่ไม่ต้องคำนวณ
+	if req.StatusID != nil {
+		updateData["status_id"] = *req.StatusID
+	}
+	if req.TreatmentNote != nil {
+		updateData["treatment_note"] = *req.TreatmentNote
+	}
+
+	return s.repo.Update(id, updateData)
+}
+
+func (s *AppointmentService) DeleteAppointment(id uint) error {
+	// เช็คก่อนว่านัดหมายมีตัวตนไหม
+	_, err := s.repo.GetByID(id)
+	if err != nil {
+		return errors.New("ไม่พบข้อมูลนัดหมายที่ต้องการลบ")
+	}
+
+	// สั่งลบ
+	return s.repo.Delete(id)
 }

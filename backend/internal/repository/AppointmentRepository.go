@@ -150,3 +150,36 @@ func (r *AppointmentRepository) GetByPatientID(patientID uint) ([]models.Appoint
 		Find(&appointments).Error
 	return appointments, err
 }
+
+func (r *AppointmentRepository) GetByID(id uint) (*models.Appointment, error) {
+	var appointment models.Appointment
+	// ดึงข้อมูลนัดหมายตาม ID
+	err := r.db.First(&appointment, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &appointment, nil
+}
+func (r *AppointmentRepository) Update(id uint, data map[string]interface{}) error {
+	// Updates จะอัปเดตเฉพาะฟิลด์ที่ส่งมาใน map
+	result := r.db.Model(&models.Appointment{}).Where("id = ?", id).Updates(data)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
+func (r *AppointmentRepository) Delete(id uint) error {
+	// GORM จะทำ Soft Delete ให้เองโดยอัตโนมัติ
+	result := r.db.Delete(&models.Appointment{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
