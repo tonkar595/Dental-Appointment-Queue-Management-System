@@ -24,5 +24,6 @@ export function middleware(request: NextRequest) {
 
 // กำหนดว่าให้ Middleware ทำงานที่ Path ไหนบ้าง
 export const config = {
-  matcher: ['/','/login', '/register', '/patient/:path*', '/dentist/:path*'],
+  matcher: ['/','/login', '/register', '/patient/:path*'], 
+  // , '/dentist/:path*'
 };

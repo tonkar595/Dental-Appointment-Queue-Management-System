@@ -15,3 +15,8 @@
     @apply bg-[#eeeeee] text-slate-800; /* กำหนดสีพื้นหลังหลักของหน้าเว็บ */
   }
 }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #EEEEEE; }
+::-webkit-scrollbar-thumb { background: #8F1EAE40; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #8F1EAE; }
